@@ -3,8 +3,16 @@ title: "R Notebook"
 output: html_notebook
 ---
 ```{r}
-counts <- read.delim(file="counts_data.csv", sep=",")
-sample_info <- read.delim(file="sample_info.csv", sep=",")
+library(rjson)
+```
+```{r}
+descriptor <- as.data.frame(rjson::fromJSON(file = "workflow_descriptor.json"))
+descriptor
+```
+
+```{r}
+counts <- read.delim(file=descriptor$inputData.name, sep=",")
+sample_info <- read.delim(file=descriptor$groups.name, sep=",")
 groups <- factor(sample_info$dexamethasone)
 data_set <- DGEList(counts=counts, group=groups)
 toKeep <- filterByExpr(data_set)
