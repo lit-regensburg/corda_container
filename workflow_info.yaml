@@ -1,0 +1,38 @@
+id: http://localhost
+name: workflow_info
+prefixes:
+  linkml: https://w3id.org/linkml/
+imports:
+  - linkml:types
+default_range: string
+
+classes:
+  InputFile:
+    attributes:
+      name:
+        required: true
+        description: Filename
+      path:
+        required: true
+        description: Path of File
+  OutputFile:
+    attributes:
+      path:
+        required: true
+        description: path of input directory
+      name:
+        required: true
+        description: Filename
+
+  WorkflowInfo:
+    tree_root: true
+    attributes:
+      inputData:
+        range: InputFile
+        required: true
+      outputData:
+        range: OutputFile
+        required: true
+      groups:
+        required: true
+        range: InputFile
