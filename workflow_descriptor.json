@@ -1,0 +1,14 @@
+{
+  "inputData": {
+    "name": "counts_data.csv",
+    "path": "./"
+  },
+  "outputData": {
+    "name": "result.Rmd",
+    "path": "./"
+  },
+  "groups": {
+    "name": "sample_info.csv",
+    "path": "./"
+  }
+}
