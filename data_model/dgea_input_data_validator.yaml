@@ -10,29 +10,52 @@ classes:
   InputFile:
     attributes:
       name:
+        identifier: true
         required: true
-        description: Filename
+        description: Name of this input file
+      file_name:
+        required: true
+        description: Name of file
       path:
         required: true
         description: Path of File
   OutputFile:
     attributes:
+      name:
+        identifier: true
+        required: true
+        description: Name of this output file
       path:
         required: true
         description: path of input directory
-      name:
+      file_name:
         required: true
         description: Filename
+  Parameter:
+    attributes:
+      description:
+        required: true
+        description: Should describe what the parameter will be used for
+      name:
+        required: true
+        identifier: true
+        description: Name of the parameter
+      parameter:
+        required: true
+        description: The actual parameter to be used
 
   WorkflowInfo:
     tree_root: true
     attributes:
       inputData:
+        multivalued: true
         range: InputFile
         required: true
       outputData:
+        multivalued: true
         range: OutputFile
         required: true
-      groups:
+      parameters:
+        multivalued: true
+        range: Parameter
         required: true
-        range: InputFile

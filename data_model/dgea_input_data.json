@@ -1,14 +1,28 @@
 {
   "inputData": {
-    "name": "counts_data.csv",
-    "path": "./"
+    "counts": {
+      "name": "counts",
+      "path": "../dex_data/",
+      "file_name": "counts_data.csv"
+    },
+    "sample_info": {
+      "name": "additional_information",
+      "file_name": "sample_info.csv",
+      "path": "../dex_data/"
+    }
   },
   "outputData": {
-    "name": "result.Rmd",
-    "path": "./"
+    "result": {
+      "name": "result",
+      "path": "./",
+      "file_name": "result.Rmd"
+    }
   },
-  "groups": {
-    "name": "sample_info.csv",
-    "path": "./"
+  "parameters": {
+    "treatment_status": {
+      "description": "Column name for dexamethasone treatment status",
+      "name": "treatment_status",
+      "parameter": "dexamethasone"
+    }
   }
 }
