@@ -13,24 +13,23 @@ classes:
         identifier: true
         required: true
         description: Name of this input file
-      file_name:
-        required: true
-        description: Name of file
       path:
         required: true
-        description: Path of File
+        description: Absolute Path including File name.
+      provider:
+        required: true
+        description: File provider, currently either irods or local.
   OutputFile:
     attributes:
       name:
         identifier: true
-        required: true
         description: Name of this output file
       path:
         required: true
-        description: path of input directory
-      file_name:
+        description: Absolute Path including File name.
+      provider:
         required: true
-        description: Filename
+        description: File provider, currently either irods or local.
   Parameter:
     attributes:
       description:
