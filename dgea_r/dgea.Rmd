@@ -8,9 +8,15 @@ library(edgeR)
 ```
 
 ```{r}
-inputData <- as.data.frame(rjson::fromJSON(file = "../data_model/dgea_input_data.json"))
-counts_data_file <- paste(c(inputData$inputData.counts.path, inputData$inputData.counts.file_name), sep="", collapse="")
-sample_info_file <- paste(c(inputData$inputData.sample_info.path, inputData$inputData.sample_info.file_name), sep="", collapse="")
+input <- snakemake@input
+inputData = as.data.frame(rjson::fromJSON(file = snakemake@input[[1]]))
+counts_data_file = snakemake@input[[3]]
+sample_info_file = snakemake@input[[4]]
+dex_status_column <- inputData$parameters.treatment_status.parameter
+```
+
+
+```{r}
 dex_status_column <- inputData$parameters.treatment_status.parameter
 ```
 
