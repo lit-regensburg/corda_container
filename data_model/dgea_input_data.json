@@ -2,17 +2,17 @@
   "inputData": {
     "counts": {
       "provider": "irods",
-      "path": "../dex_data/"
+      "path": "home/rods/test_collection/counts_data.csv"
     },
     "sample_info": {
       "provider": "irods",
-      "path": "../dex_data/"
+      "path": "home/rods/test_collection/sample_info.csv"
     }
   },
   "outputData": {
     "result": {
       "provider": "irods",
-      "path": "./"
+      "path": "home/rods/test_collection/report.nb.html"
     }
   },
   "parameters": {
