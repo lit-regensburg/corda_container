@@ -1,0 +1,36 @@
+---
+title: "Differential gene expression analysis of the airway data package"
+output: html_notebook
+---
+```{r}
+library(rjson)
+library(edgeR)
+```
+
+```{r}
+input <- snakemake@input
+inputData = as.data.frame(rjson::fromJSON(file = snakemake@input[[1]]))
+counts_data_file = snakemake@input[[3]]
+sample_info_file = snakemake@input[[4]]
+dex_status_column <- inputData$parameters.treatment_status.parameter
+```
+
+
+```{r}
+dex_status_column <- inputData$parameters.treatment_status.parameter
+```
+
+```{r}
+counts <- read.delim(file=counts_data_file, sep=",")
+sample_info <- read.delim(file=sample_info_file, sep=",")
+groups <- factor(sample_info[[dex_status_column]])
+data_set <- DGEList(counts=counts, group=groups)
+toKeep <- filterByExpr(data_set)
+data_set <- data_set[toKeep,,keep.lib.sizes=FALSE]
+data_set <- calcNormFactors(data_set)
+design <- model.matrix(~groups)
+data_set <- estimateDisp(data_set, design)
+fit <- glmQLFit(data_set, design)
+qlf <- glmQLFTest(fit) 
+topTags(qlf)
+```

@@ -1,0 +1,48 @@
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: Role
+# metadata:
+#   namespace: thimo
+#   name: admin
+# rules:
+# - apiGroups: [""] # "" indicates the core API group
+#   resources: ["*"]
+#   verbs: ["*"]
+
+
+# ---
+
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: thimo
+  name: user
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods"]
+  resourceNames: ["test-pod"]
+  verbs: ["get", "create", "update", "delete"]
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["persistentvolumeclaims"]
+  resourceNames: ["test-pvc"]
+  verbs: ["get","list","watch", "create", "update", "delete"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+# This role binding allows "jane" to read pods in the "default" namespace.
+# You need to already have a Role named "pod-reader" in that namespace.
+kind: RoleBinding
+metadata:
+  name: user-binding
+  namespace: thimo
+subjects:
+# You can specify more than one "subject"
+- kind: User
+  name: "oidc:Thimo.Test@lit.eu"
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  # "roleRef" specifies the binding to a Role / ClusterRole
+  kind: Role #this must be Role or ClusterRole
+  name: user
+  apiGroup: rbac.authorization.k8s.io

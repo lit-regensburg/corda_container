@@ -1,0 +1,6 @@
+services:
+  dev_container:
+    image: workflow_container:new
+    network_mode: "host"
+    volumes:
+      - ./auth/.irodsA:/home/swuser/.irods/.irodsA

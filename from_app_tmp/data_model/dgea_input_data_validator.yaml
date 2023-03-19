@@ -1,0 +1,60 @@
+id: http://localhost
+name: workflow_info
+prefixes:
+  linkml: https://w3id.org/linkml/
+imports:
+  - linkml:types
+default_range: string
+
+classes:
+  InputFile:
+    attributes:
+      name:
+        identifier: true
+        required: true
+        description: Name of this input file
+      path:
+        required: true
+        description: Absolute Path including File name.
+      provider:
+        required: true
+        description: File provider, currently either irods or local.
+  OutputFile:
+    attributes:
+      name:
+        identifier: true
+        description: Name of this output file
+      path:
+        required: true
+        description: Absolute Path including File name.
+      provider:
+        required: true
+        description: File provider, currently either irods or local.
+  Parameter:
+    attributes:
+      description:
+        required: true
+        description: Should describe what the parameter will be used for
+      name:
+        required: true
+        identifier: true
+        description: Name of the parameter
+      parameter:
+        required: true
+        description: The actual parameter to be used
+
+  WorkflowInfo:
+    tree_root: true
+    attributes:
+      inputData:
+        multivalued: true
+        range: InputFile
+        required: true
+      outputData:
+        multivalued: true
+        range: OutputFile
+        required: true
+      parameters:
+        multivalued: true
+        range: Parameter
+        required: true

@@ -1,6 +1,13 @@
+import json
+from snakemake.remote.iRODS import RemoteProvider
+configfile: "./data_model/dgea_input_data.json"
+
+irods = RemoteProvider(irods_env_file='/home/thimo/.irods/irods_environment.json')
+files, = irods.glob_wildcards("{files}")
+
 rule all:
   input:
-    "./report.nb.html"
+    irods.remote(config["outputData"]["result"]["path"])
 
 rule validate_data_model_structure:
   input:
@@ -13,11 +20,12 @@ rule validate_data_model_structure:
 
 rule do_dgea_analysis:
   input:
-    "validation.done",
     "data_model/dgea_input_data.json",
+    "validation.done",
+    irods.remote(config["inputData"]["counts"]["path"]),
+    irods.remote(config["inputData"]["sample_info"]["path"]),
     "dgea_r/dgea.Rmd"
   output:
-    "./report.nb.html"
-  shell:
-    "Rscript -e 'rmarkdown::render(\"{input[2]}\", output_file=\"{output}\")'"
-    
+    irods.remote(config["outputData"]["result"]["path"])
+  script:
+    "dgea_r/dgea.Rmd"
