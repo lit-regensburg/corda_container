@@ -1,0 +1,12 @@
+import json
+from snakemake.remote.iRODS import RemoteProvider
+configfile: "./workflow_descriptor.json"
+
+irods = RemoteProvider(irods_env_file='/home/thimo/.irods/irods_environment.json')
+files, = irods.glob_wildcards("{files}")
+
+rule all:
+  input:
+    ./irods/irods_environment.json
+
+

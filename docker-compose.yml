@@ -1,6 +1,10 @@
 services:
   dev_container:
-    image: workflow_container:new
+    image: dgea_container:latest
     network_mode: "host"
-    volumes:
-      - ./auth/.irodsA:/home/swuser/.irods/.irodsA
+    environment:
+      - GIT_REPO=https://coffee_ginger@gitlab.com/Coffee_Ginger/kubernetes-client/
+      - GIT_PASSWORD=glpat-BLo2A9a2GKCA2nHNXaZU
+      # - RUN_MODE=REPRODUCIBLE
+    # volumes:
+    #   - ./auth/.irodsA:/home/swuser/.irods/.irodsA

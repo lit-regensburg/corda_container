@@ -7,6 +7,18 @@ imports:
 default_range: string
 
 classes:
+  IrodsEnvironment:
+    attributes:
+      irods_host:
+        required: true
+      irods_port:
+        required: true
+      irods_user_name:
+        required: true
+      irods_zone_name:
+        required: true
+      irods_authentication_file:
+        required: true
   InputFile:
     attributes:
       name:
@@ -46,6 +58,13 @@ classes:
   WorkflowInfo:
     tree_root: true
     attributes:
+      repository:
+        required: true
+      image:
+        required: true
+      irods_environment:
+        range: IrodsEnvironment
+        required: true
       inputData:
         multivalued: true
         range: InputFile

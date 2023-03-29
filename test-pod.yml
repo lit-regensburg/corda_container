@@ -5,7 +5,7 @@ metadata:
   namespace: thimo
 spec:
   containers:
-    - image: coffeeginger/masterarbeit:latest
+    - image: coffeeginger/masterarbeit:new
       name: test-container
       ports:
         - containerPort: 8888

@@ -1,6 +1,6 @@
 import json
 from snakemake.remote.iRODS import RemoteProvider
-configfile: "./data_model/dgea_input_data.json"
+configfile: "/app/config/workflow_descriptor.json"
 
 irods = RemoteProvider(irods_env_file='/home/thimo/.irods/irods_environment.json')
 files, = irods.glob_wildcards("{files}")
@@ -11,8 +11,8 @@ rule all:
 
 rule validate_data_model_structure:
   input:
-    "data_model/dgea_input_data.json",
-    "data_model/dgea_input_data_validator.yaml"
+    "./workflow_descriptor.json",
+    "./analysis/data_model/workflow_descriptor_validator.yaml"
   output:
     temporary(touch("validation.done"))
   shell: 

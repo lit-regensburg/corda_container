@@ -1,14 +1,14 @@
 FROM debian
 SHELL ["/bin/bash", "-i", "-c"]
 RUN groupadd -r swuser -g 1000 && \
-    useradd -m -u 1000 -r -g swuser -c "Docker image user" swuser
+  useradd -m -u 1000 -r -g swuser -c "Docker image user" swuser
 RUN adduser swuser sudo
 
-RUN apt update && apt upgrade && apt install curl gpg apt-utils wget lsb-release sudo --assume-yes
+RUN apt update -y && apt upgrade -y && apt install curl gpg apt-utils wget lsb-release sudo git --assume-yes
 RUN curl https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc | gpg --dearmor > conda.gpg
 RUN install -o swuser -g swuser -m 644 conda.gpg /usr/share/keyrings/conda-archive-keyring.gpg
 RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/conda-archive-keyring.gpg] https://repo.anaconda.com/pkgs/misc/debrepo/conda stable main" > /etc/apt/sources.list.d/conda.list
-RUN apt update && apt upgrade
+RUN apt update -y && apt upgrade -y
 RUN apt install conda --assume-yes
 # RUN apt install r-base --assume-yes
 
@@ -26,7 +26,6 @@ RUN mkdir .r_libs
 ENV R_LIBS_USER /app/.r_libs
 
 
-COPY irods_environment.json .irods/
 # COPY container_env.yml ./deps
 # COPY renv.lock ./deps
 COPY deps deps
@@ -47,8 +46,10 @@ RUN conda update conda
 
 RUN conda install -n base -c conda-forge mamba
 COPY create_conda_environments.sh ./
-RUN conda config --add channels conda-forge
-RUN conda config --add channels bioconda
+RUN conda config --append channels conda-forge
+RUN conda config --append channels bioconda
+RUN conda config --append channels anaconda
+RUN conda config --show channels
 USER root
 RUN chmod +x create_conda_environments.sh
 USER swuser
@@ -56,19 +57,29 @@ RUN conda config --show
 RUN ./create_conda_environments.sh deps/conda_envs
 RUN rm create_conda_environments.sh
 RUN echo "conda activate container_env" >> ~/.bashrc
+COPY helpers ./helpers
+USER root
+RUN chmod +x helpers/*
+COPY snakefile snakefile
+USER swuser
+RUN mkdir config
+RUN mkdir .irods
+RUN mkdir analysis
 # RUN conda create --name container_env #create -f ./deps/container_env.yml
 
 # RUN mamba install jupyterlab
 # RUN conda activate container_env && \
 #   mamba install -c conda-forge -c bioconda snakemake
 
-COPY snakefile ./
-COPY dgea_r ./dgea_r
-COPY data_model ./data_model
+# COPY snakefile ./
+# COPY dgea_r ./dgea_r
+# COPY data_model ./data_model
 # COPY auth/.irodsA /home/swuser/.irods/.irodsA
 USER root
+RUN apt install -y neovim nano jq
 RUN chown -R swuser:swuser /home/swuser/
 RUN chown -R swuser:swuser ./
 USER swuser
-CMD ["conda", "run", "--no-capture-output", "-n", "container_env", "jupyter-lab", "--no-browser", "--NotebookApp.token=''", "--NotebookApp.password=''"]
+ENTRYPOINT [ "/app/helpers/init.sh" ]
+# CMD ["conda", "run", "--no-capture-output", "-n", "container_env", "jupyter-lab", "--no-browser", "--NotebookApp.token=''", "--NotebookApp.password=''"]
 
