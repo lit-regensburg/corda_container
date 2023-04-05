@@ -9,15 +9,10 @@ files, = irods.glob_wildcards("{files}")
 input_files = list(map(lambda file : file["path"], config["inputData"].values()))
 output_files = list(map(lambda file : file["path"], config["outputData"].values()))
 
-module analysis_workflow:
-  snakefile:
-    "analysis/snakefile"
-  config: config
-
-use rule * from analysis_workflow
 
 rule all:
   input:
+    "workflow_descriptor.json",
     irods.remote(expand('{f}',f=output_files))
 
 rule validate_data_model_structure:
@@ -28,3 +23,21 @@ rule validate_data_model_structure:
     temporary(touch("validation.done"))
   shell: 
     "linkml-validate -s {input[1]} {input[0]}"
+
+rule hash_input_files:
+  input:
+    "config/workflow_descriptor.json",
+    "validation.done",
+    irods.remote(expand('{f}',f=input_files))
+  output:
+    "workflow_descriptor.json"
+  shell:
+    "helpers/hash_input_files.sh"
+    
+module analysis_workflow:
+  snakefile:
+    "analysis/snakefile"
+  config: config
+
+use rule * from analysis_workflow
+
