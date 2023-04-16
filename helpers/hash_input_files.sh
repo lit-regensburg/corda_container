@@ -1,8 +1,6 @@
 #!/bin/bash
 CONFIG_PATH="/app/config/workflow_descriptor.json"
 CONFIG=$(cat $CONFIG_PATH)
-ARRAY_LENGTH=$(echo $CONFIG | jq '.inputData | length')
-RESULT_ARRAY=""
 declare -a KEYS=( $(cat $CONFIG_PATH | jq -c -r '.inputData | keys_unsorted | @sh' | tr -d "'") )
 for KEY in "${KEYS[@]}"
 do
