@@ -1,4 +1,4 @@
-FROM debian
+FROM debian:bullseye
 SHELL ["/bin/bash", "-i", "-c"]
 RUN groupadd -r swuser -g 1000 && \
   useradd -m -u 1000 -r -g swuser -c "Docker image user" swuser
@@ -17,18 +17,12 @@ RUN apt update
 RUN apt install irods-icommands --assume-yes
 
 WORKDIR /app
-RUN mkdir auth
 RUN mkdir deps
-RUN mkdir .r_libs
-ENV R_LIBS_USER /app/.r_libs
-
-
 COPY deps deps
 
 ENV IRODS_ENVIRONMENT_FILE=/app/.irods/irods_environment.json
 
 ENV PATH /opt/conda/bin:$PATH
-# TODO -> Inject password
 RUN echo "swuser:password" | chpasswd
 RUN chown -R swuser:swuser /opt/conda
 RUN chown -R swuser:swuser ./
